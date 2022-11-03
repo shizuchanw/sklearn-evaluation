@@ -8,7 +8,7 @@ from sklearn.cluster import KMeans
 
 @SKLearnEvaluationLogger.log(feature='plot')
 def intercluster_distance(X,
-                          model,
+                          model=KMeans(),
                           n_clusters=6,
                           ax=None):
     """Plots elbow curve of different values of K of a clustering algorithm.
@@ -47,4 +47,16 @@ def intercluster_distance(X,
         raise TypeError('"n_clusters" attribute not in classifier. '
                         'Cannot plot intercluster distance.')
 
+    if ax is None:
+        ax = plt.gca()
+
+    model.n_clusters = n_clusters;
+    model.fit(X);
+
+
+    ax.set_title('Intercluster Distance')
+    ax.plot(n_clusters, sum_of_squares, 'b*-')
+    ax.grid(True)
+    ax.set_xlabel('Number of clusters')
+    ax.set_ylabel('Sum of Squared Errors')
     return
